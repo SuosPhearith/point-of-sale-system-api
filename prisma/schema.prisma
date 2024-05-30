@@ -23,7 +23,7 @@ model User {
   name        String
   email       String        @unique
   password    String
-  role        Role          @relation(fields: [roleId], references: [id])
+  role        Role          @relation(fields: [roleId], references: [id], onDelete: SetDefault)
   roleId      Int
   status      Boolean       @default(true)
   avatar      String?
@@ -33,11 +33,12 @@ model User {
   updatedAt   DateTime      @updatedAt
   Log         Log[]
   UserSession UserSession[]
+  Customer    Customer[]
 }
 
 model Log {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   device    String
   browser   String
@@ -52,5 +53,70 @@ model UserSession {
   browser      String
   createdAt    DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String?
+  point     Int      @default(0)
+  status    Boolean  @default(true)
+  gender    Gender
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [createdBy], references: [id], onDelete: SetNull)
+  createdBy Int?
+  Order     Order[]
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  status      Boolean   @default(true)
+  image       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Product     Product[]
+}
+
+model Product {
+  id          Int           @id @default(autoincrement())
+  category    Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId  Int?
+  name        String
+  price       String
+  stock       Int           @default(0)
+  discount    Int           @default(0)
+  image       String?
+  status      Boolean       @default(true)
+  alert       Int           @default(10)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  OrderDetail OrderDetail[]
+}
+
+model Order {
+  id          Int           @id @default(autoincrement())
+  customer    Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId  Int
+  totalItem   Int
+  totalPrice  Float
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  OrderDetail OrderDetail[]
+}
+
+model OrderDetail {
+  id         Int      @id @default(autoincrement())
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId    Int
+  product    Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId  Int?
+  price      Float
+  discount   Int
+  finalPrice Float
+  quantity   Int
+  totalPrice Float
 }

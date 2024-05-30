@@ -8,6 +8,7 @@ import { JwtService } from './auth/jwt.service';
 import { EmployeeModule } from './admin/employee/employee.module';
 import { AdminModule } from './admin/admin/admin.module';
 import { FileUploadModule } from './file/file-upload.module';
+import { CustomerModule } from './admin/customer/customer.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { FileUploadModule } from './file/file-upload.module';
     EmployeeModule,
     AdminModule,
     FileUploadModule,
+    CustomerModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, JwtService],

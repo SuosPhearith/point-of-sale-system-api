@@ -45,6 +45,16 @@ export class AuthController {
     return this.authService.refreshToken(token.refreshToken);
   }
 
+  @Post('uploadAvatar')
+  @UseGuards(AuthenticationGuard)
+  @UseInterceptors(FileInterceptor('file', multerConfig))
+  async uploadAvatar(
+    @UploadedFile(FileImagePipe) file: MulterFile,
+    @Req() { user },
+  ) {
+    return this.authService.uploadAvatar(file, user);
+  }
+
   @Get('me')
   @UseGuards(AuthenticationGuard)
   me(@Req() { user }) {
@@ -73,25 +83,18 @@ export class AuthController {
     return this.authService.getSession(page, pageSize, user);
   }
 
+  @Get('onlyAdmin')
+  @Roles(Role.admin, Role.employee)
+  @UseGuards(AuthenticationGuard, AuthorizationGuard)
+  onlyAdmin() {
+    return 'You are admin or principal.';
+  }
+
   @Patch('account/logoutAllDevices')
   @Roles(Role.admin, Role.employee)
   @UseGuards(AuthenticationGuard, AuthorizationGuard)
   logoutAllDevices(@Req() { user }) {
     return this.authService.logoutAllDevices(user);
-  }
-
-  @Delete('account/logoutDevice/:sessionToken')
-  @Roles(Role.admin, Role.employee)
-  @UseGuards(AuthenticationGuard, AuthorizationGuard)
-  logoutDevice(@Param('sessionToken') sessionToken: string) {
-    return this.authService.logoutDevice(sessionToken);
-  }
-
-  @Delete('logout')
-  @Roles(Role.admin, Role.employee)
-  @UseGuards(AuthenticationGuard, AuthorizationGuard)
-  logout(@Req() { session }) {
-    return this.authService.logout(session);
   }
 
   @Patch('changePassword')
@@ -109,20 +112,23 @@ export class AuthController {
     return this.authService.updateProfile(updateProfileDTO, user);
   }
 
-  @Post('uploadAvatar')
-  @UseGuards(AuthenticationGuard)
-  @UseInterceptors(FileInterceptor('file', multerConfig))
-  async uploadAvatar(
-    @UploadedFile(FileImagePipe) file: MulterFile,
-    @Req() { user },
-  ) {
-    return this.authService.uploadAvatar(file, user);
-  }
-
-  @Get('onlyAdmin')
+  @Delete('account/logoutDevice/:sessionToken')
   @Roles(Role.admin, Role.employee)
   @UseGuards(AuthenticationGuard, AuthorizationGuard)
-  onlyAdmin() {
-    return 'You are admin or principal.';
+  logoutDevice(@Param('sessionToken') sessionToken: string) {
+    return this.authService.logoutDevice(sessionToken);
+  }
+
+  @Delete('logout')
+  @Roles(Role.admin, Role.employee)
+  @UseGuards(AuthenticationGuard, AuthorizationGuard)
+  logout(@Req() { session }) {
+    return this.authService.logout(session);
+  }
+
+  @Delete('deleteAccount')
+  @UseGuards(AuthenticationGuard)
+  async deleteAccount(@Req() { user }) {
+    return this.authService.deleteAccount(user);
   }
 }

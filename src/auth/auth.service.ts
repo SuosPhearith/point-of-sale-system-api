@@ -244,6 +244,10 @@ export class AuthService {
           session: user.session + 1,
         },
       });
+      // delete all session token
+      await this.prisma.userSession.deleteMany({
+        where: { userId: existingUser.id },
+      });
       // response back
       return {
         message: 'Logout successfully',
@@ -392,6 +396,29 @@ export class AuthService {
       // response back
       return {
         message: 'Updated succesfully!',
+        statusCode: HttpStatus.OK,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteAccount(user: User): Promise<any> {
+    try {
+      // check is user is valid
+      const oldUser = await this.prisma.user.findUnique({
+        where: { id: user.id },
+      });
+      if (!oldUser) throw new NotFoundException();
+      // start delete
+      await this.prisma.user.delete({
+        where: {
+          id: oldUser.id,
+        },
+      });
+      // response back
+      return {
+        message: 'Deleted succesfully!',
         statusCode: HttpStatus.OK,
       };
     } catch (error) {
