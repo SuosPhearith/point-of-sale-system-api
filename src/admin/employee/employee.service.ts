@@ -11,10 +11,14 @@ import * as bcrypt from 'bcrypt';
 import { CreateEmployeeDTO } from './dto/create-employee.dto';
 import { Role } from 'src/global/enum/role.enum';
 import { UpdateEmployeeDTO } from './dto/update-employee.dto';
+import { FileUploadService } from 'src/file/file-upload.service';
 
 @Injectable()
 export class EmployeeService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly fileUploadService: FileUploadService,
+  ) {}
   async create(
     createEmployeeDTO: CreateEmployeeDTO,
   ): Promise<ResponseCreateOrUpdateDTO> {
@@ -41,8 +45,9 @@ export class EmployeeService {
       return response;
     } catch (error) {
       //check if duplicate
-      if (error.code === 'P2002')
+      if (error.code === 'P2002') {
         throw new ConflictException('Email already exists');
+      }
       throw error;
     }
   }
@@ -124,8 +129,6 @@ export class EmployeeService {
       // validate if user not found
       if (!user)
         throw new NotFoundException(`Employee with id: ${id} not found`);
-      // check account is valid
-      if (!user.status) return { message: 'Account was ban!' };
       // response back
       return user;
     } catch (error) {
@@ -138,8 +141,6 @@ export class EmployeeService {
     updateEmployeeDTO: UpdateEmployeeDTO,
   ): Promise<ResponseCreateOrUpdateDTO> {
     try {
-      //hash password
-      const hashedPassword = await bcrypt.hash(updateEmployeeDTO.password, 10);
       // find user by id
       const user = await this.findOne(id);
       // start update
@@ -147,7 +148,7 @@ export class EmployeeService {
         where: {
           id: user.id,
         },
-        data: { ...updateEmployeeDTO, password: hashedPassword },
+        data: updateEmployeeDTO,
       });
       delete updateUser.password;
       //response back
@@ -158,8 +159,9 @@ export class EmployeeService {
       };
     } catch (error) {
       //check if duplicate
-      if (error.code === 'P2002')
+      if (error.code === 'P2002') {
         throw new ConflictException('Email already exists');
+      }
       throw error;
     }
   }
@@ -204,6 +206,31 @@ export class EmployeeService {
       });
       return {
         message: 'Updated success',
+        statusCode: HttpStatus.OK,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateImage(file: any, id: number): Promise<any> {
+    try {
+      // check is user is valid
+      const employee = await this.findOne(+id);
+      // Use the FileUploadService here
+      const result = this.fileUploadService.handleFileUpload(file);
+      // start update
+      await this.prisma.user.update({
+        where: {
+          id: employee.id,
+        },
+        data: {
+          avatar: result.path,
+        },
+      });
+      // response back
+      return {
+        message: 'Updated succesfully!',
         statusCode: HttpStatus.OK,
       };
     } catch (error) {

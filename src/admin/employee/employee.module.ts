@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { EmployeeController } from './employee.controller';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { JwtService } from 'src/auth/jwt.service';
+import { AuthModule } from 'src/auth/auth.module';
+import { FileUploadModule } from 'src/file/file-upload.module';
 
 @Module({
+  imports: [AuthModule, FileUploadModule],
   controllers: [EmployeeController],
-  providers: [EmployeeService, PrismaService, JwtService],
+  providers: [EmployeeService],
 })
 export class EmployeeModule {}

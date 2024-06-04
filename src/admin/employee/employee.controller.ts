@@ -8,7 +8,9 @@ import {
   Post,
   Query,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { Roles } from 'src/auth/decorators/roles/roles.decorator';
@@ -17,6 +19,10 @@ import { AuthenticationGuard } from 'src/auth/guards/authentication/authenticati
 import { AuthorizationGuard } from 'src/auth/guards/authorization/authorization.guard';
 import { UpdateEmployeeDTO } from './dto/update-employee.dto';
 import { CreateEmployeeDTO } from './dto/create-employee.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { multerConfig } from 'src/config/multer.config';
+import { FileImagePipe } from 'src/file/validation/file-image.pipe';
+import { File as MulterFile } from 'multer';
 
 @Controller('api/employee')
 export class EmployeeController {
@@ -62,6 +68,16 @@ export class EmployeeController {
   @UseGuards(AuthenticationGuard, AuthorizationGuard)
   toggleActive(@Param('id') id: number, @Req() { user }) {
     return this.employeeService.toggleActive(+id, user);
+  }
+
+  @Patch(':id/updateImage')
+  @UseGuards(AuthenticationGuard)
+  @UseInterceptors(FileInterceptor('file', multerConfig))
+  async updateImage(
+    @UploadedFile(FileImagePipe) file: MulterFile,
+    @Param('id') id: number,
+  ) {
+    return this.employeeService.updateImage(file, id);
   }
 
   @Delete(':id')

@@ -5,37 +5,29 @@ enum Gender {
 }
 
 // Define your users array with the Gender enum
-export const users = [
+export const customers = [
   {
-    id: 1,
     name: 'Suos Phearith',
     email: 'suosphearith@gmail.com',
-    password: '12345678',
     gender: Gender.Male,
-    roleId: 1,
+    createdBy: 1,
   },
   {
-    id: 2,
     name: 'Vann Chansethy',
     email: 'vannchansethy@gmail.com',
-    password: '12345678',
     gender: Gender.Male,
-    roleId: 2,
+    createdBy: 2,
   },
   {
-    id: 3,
     name: 'Tom Tito',
     email: 'tomtito@gmail.com',
-    password: '12345678',
     gender: Gender.Male,
-    roleId: 2,
+    createdBy: 2,
   },
   {
-    id: 4,
     name: 'Song Kheang',
     email: 'songkheang@gmail.com',
-    password: '12345678',
     gender: Gender.Male,
-    roleId: 2,
+    createdBy: 2,
   },
 ];
