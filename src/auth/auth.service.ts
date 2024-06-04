@@ -24,7 +24,6 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
-    private fileUplaodService: FileUploadService,
     private readonly fileUploadService: FileUploadService,
   ) {}
   async signUp(
@@ -49,8 +48,9 @@ export class AuthService {
       return response;
     } catch (error) {
       //check if duplicate
-      if (error.code === 'P2002')
+      if (error.code === 'P2002') {
         throw new ConflictException('Email already exists');
+      }
       throw error;
     }
   }
@@ -369,8 +369,9 @@ export class AuthService {
       };
     } catch (error) {
       //check if duplicate
-      if (error.code === 'P2002')
+      if (error.code === 'P2002') {
         throw new ConflictException('Email already exists');
+      }
       throw error;
     }
   }

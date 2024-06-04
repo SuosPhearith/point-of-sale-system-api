@@ -72,7 +72,7 @@ model Customer {
 
 model Category {
   id          Int       @id @default(autoincrement())
-  name        String
+  name        String    @unique
   description String?
   status      Boolean   @default(true)
   image       String?
@@ -86,7 +86,7 @@ model Product {
   category    Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   categoryId  Int?
   name        String
-  price       String
+  price       Float
   stock       Int           @default(0)
   discount    Int           @default(0)
   image       String?

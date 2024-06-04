@@ -123,8 +123,9 @@ export class CustomerService {
       };
     } catch (error) {
       //check if duplicate
-      if (error.code === 'P2002')
+      if (error.code === 'P2002') {
         throw new ConflictException('Email already exists');
+      }
       throw error;
     }
   }

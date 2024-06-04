@@ -82,7 +82,7 @@ CREATE TABLE "Product" (
     "id" SERIAL NOT NULL,
     "categoryId" INTEGER,
     "name" TEXT NOT NULL,
-    "price" TEXT NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
     "stock" INTEGER NOT NULL DEFAULT 0,
     "discount" INTEGER NOT NULL DEFAULT 0,
     "image" TEXT,
@@ -125,6 +125,9 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "UserSession_sessionToken_key" ON "UserSession"("sessionToken");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Category_name_key" ON "Category"("name");
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE SET DEFAULT ON UPDATE CASCADE;
