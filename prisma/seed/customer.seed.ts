@@ -7,6 +7,13 @@ enum Gender {
 // Define your users array with the Gender enum
 export const customers = [
   {
+    id: 1,
+    name: 'General Customer',
+    email: 'general@gmail.com',
+    gender: Gender.Male,
+    createdBy: 1,
+  },
+  {
     name: 'Suos Phearith',
     email: 'suosphearith@gmail.com',
     gender: Gender.Male,
