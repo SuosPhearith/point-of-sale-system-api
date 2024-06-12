@@ -11,6 +11,7 @@ import { FileUploadModule } from './file/file-upload.module';
 import { CustomerModule } from './admin/customer/customer.module';
 import { CategoryModule } from './admin/category/category.module';
 import { ProductModule } from './admin/product/product.module';
+import { OrderModule } from './admin/order/order.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ProductModule } from './admin/product/product.module';
     CustomerModule,
     CategoryModule,
     ProductModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, JwtService],

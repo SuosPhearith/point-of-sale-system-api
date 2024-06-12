@@ -146,6 +146,23 @@ export class ProductService {
     }
   }
 
+  async addStock(id: number, newStock: any): Promise<any> {
+    try {
+      // check is valid id
+      const product = await this.findOne(+id);
+      await this.prisma.product.update({
+        where: { id: product.id },
+        data: { stock: { increment: +newStock } },
+      });
+      return {
+        message: 'Updated success',
+        statusCode: HttpStatus.OK,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async remove(id: number): Promise<any> {
     try {
       // find product by id
