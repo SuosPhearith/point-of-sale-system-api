@@ -14,24 +14,28 @@ export const customers = [
     createdBy: 1,
   },
   {
+    id: 2,
     name: 'Suos Phearith',
     email: 'suosphearith@gmail.com',
     gender: Gender.Male,
     createdBy: 1,
   },
   {
+    id: 3,
     name: 'Vann Chansethy',
     email: 'vannchansethy@gmail.com',
     gender: Gender.Male,
     createdBy: 2,
   },
   {
+    id: 4,
     name: 'Tom Tito',
     email: 'tomtito@gmail.com',
     gender: Gender.Male,
     createdBy: 2,
   },
   {
+    id: 5,
     name: 'Song Kheang',
     email: 'songkheang@gmail.com',
     gender: Gender.Male,
