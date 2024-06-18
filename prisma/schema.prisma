@@ -1,10 +1,10 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
 }
 
 enum Gender {
@@ -99,8 +99,8 @@ model Product {
 
 model Order {
   id          Int           @id @default(autoincrement())
-  customer    Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  customerId  Int
+  customer    Customer?     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId  Int?
   totalItem   Int
   totalPrice  Float
   createdAt   DateTime      @default(now())

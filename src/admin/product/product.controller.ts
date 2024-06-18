@@ -68,6 +68,12 @@ export class ProductController {
     return this.productService.toggleActive(+id);
   }
 
+  @Patch(':id/addStock')
+  @UseGuards(AuthenticationGuard)
+  addStock(@Param('id') id: number, @Body('stock') stock: any) {
+    return this.productService.addStock(+id, stock);
+  }
+
   @Patch(':id/updateImage')
   @UseGuards(AuthenticationGuard)
   @UseInterceptors(FileInterceptor('file', multerConfig))
