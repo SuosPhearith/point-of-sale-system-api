@@ -12,6 +12,7 @@ import { users } from './user.seed';
 import { customers } from './customer.seed';
 import { categories } from './category.seed';
 import { products } from './product.seed';
+import { dashboards } from './dashboard.seed';
 //::================================================================================::
 
 // initialize Prisma Client
@@ -29,6 +30,7 @@ async function main() {
   await prisma.userSession.deleteMany();
   await prisma.user.deleteMany();
   await prisma.role.deleteMany();
+  await prisma.dashboard.deleteMany();
   //::================================================================================::
 
   //::================================>>Start seed<<==================================::
@@ -63,6 +65,10 @@ async function main() {
     console.log(newProduct);
   }
 
+  for (const dashboard of dashboards) {
+    const newDashboard = await prisma.dashboard.create({ data: dashboard });
+    console.log(newDashboard);
+  }
   //::================================================================================::
 
   console.log('===============================');
