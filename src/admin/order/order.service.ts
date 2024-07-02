@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ResponseCreateOrUpdateDTO } from 'src/global/dto/response.create.update.dto';
@@ -84,6 +84,21 @@ export class OrderService {
         createOrderDto,
         totalPrice,
       );
+      // add point to customer
+      const customer = await this.prisma.customer.findUnique({
+        where: { id: createOrderDto.customerId },
+      });
+      if (!customer) {
+        throw new BadRequestException();
+      }
+      await this.prisma.customer.update({
+        where: {
+          id: createOrderDto.customerId,
+        },
+        data: {
+          point: customer.point + 1,
+        },
+      });
       this.sendMessageToTelegramBot(
         process.env.TELEGRAM_BOT_TOKEN,
         process.env.TELEGRAM_CHAT_ID,

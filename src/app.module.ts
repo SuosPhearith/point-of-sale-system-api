@@ -12,6 +12,7 @@ import { CustomerModule } from './admin/customer/customer.module';
 import { CategoryModule } from './admin/category/category.module';
 import { ProductModule } from './admin/product/product.module';
 import { OrderModule } from './admin/order/order.module';
+import { DashboardModule } from './admin/dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { OrderModule } from './admin/order/order.module';
     CategoryModule,
     ProductModule,
     OrderModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, JwtService],
