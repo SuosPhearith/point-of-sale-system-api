@@ -426,4 +426,26 @@ export class AuthService {
       throw error;
     }
   }
+
+  async resetPassword(id: number) {
+    try {
+      const user = await this.prisma.user.findUnique({ where: { id } });
+      if (!user) {
+        throw new BadRequestException();
+      }
+      //hash password
+      const hashedPassword = await bcrypt.hash('12345678', 10);
+      await this.prisma.user.update({
+        where: { id },
+        data: { password: hashedPassword },
+      });
+      // response back
+      return {
+        message: 'Updated successfully',
+        statusCode: HttpStatus.OK,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
 }

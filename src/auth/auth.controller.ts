@@ -97,6 +97,13 @@ export class AuthController {
     return this.authService.logoutAllDevices(user);
   }
 
+  @Patch('account/:id/resetPassword')
+  @Roles(Role.admin)
+  @UseGuards(AuthenticationGuard, AuthorizationGuard)
+  resetPassword(@Param('id') id: number) {
+    return this.authService.resetPassword(+id);
+  }
+
   @Patch('changePassword')
   @UseGuards(AuthenticationGuard)
   changePassword(
