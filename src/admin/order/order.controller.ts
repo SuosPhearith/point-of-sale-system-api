@@ -15,8 +15,17 @@ export class OrderController {
 
   @Get('getAllProducts')
   @UseGuards(AuthenticationGuard)
-  getAllProducts(@Query('key') key: string = '') {
-    return this.orderService.getAllProducts(key);
+  getAllProducts(
+    @Query('key') key: string = '',
+    @Query('catKey') catKey: string = '',
+  ) {
+    return this.orderService.getAllProducts(key, catKey);
+  }
+
+  @Get('getAllCategories')
+  @UseGuards(AuthenticationGuard)
+  getAllCategories() {
+    return this.orderService.getAllCategories();
   }
 
   @Get('getAllCustomers')
