@@ -134,11 +134,34 @@ export class OrderService {
     }
   }
 
-  async getAllProducts(key: string) {
+  async getAllCategories() {
+    try {
+      const categoryList = await this.prisma.category.findMany({
+        where: { status: true },
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+      // format response
+      const categories = categoryList.map((c) => ({
+        value: c.id,
+        label: c.name,
+      }));
+      return categories;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllProducts(key: string, catKey: string) {
     try {
       const where: any = { status: true, stock: { gt: 0 } };
       if (key) {
         where.OR = [{ name: { contains: key, mode: 'insensitive' } }];
+      }
+      if (catKey) {
+        where.categoryId = +catKey;
       }
       const productList = await this.prisma.product.findMany({
         where,

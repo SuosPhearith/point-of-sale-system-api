@@ -45,10 +45,11 @@ export class EmployeeService {
       return response;
     } catch (error) {
       //check if duplicate
-      if (error.code === 'P2002') {
+      if (error && error.code === 'P2002') {
         throw new ConflictException('Email already exists');
+      } else {
+        throw error;
       }
-      throw error;
     }
   }
 
